@@ -1,0 +1,42 @@
+name: bdhs_restaurant_app
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  provider: ^6.0.5
+  http: ^1.1.0
+  fluttertoast: ^8.2.2
+  get_storage: ^2.1.1
+  pie_chart: ^5.4.0
+  firebase_core: ^2.24.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+#  change_app_package_name: ^1.1.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/home/
+  fonts:
+    - family: inter
+      fonts:
+        - asset: assets/font/Inter-Light.ttf
+          weight: 400
+        - asset: assets/font/Inter-Regular.ttf
+          weight: 500
+        - asset: assets/font/Inter-SemiBold.ttf
+          weight: 600
