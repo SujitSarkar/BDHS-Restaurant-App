@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/Material.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/utils/app_navigator_key.dart';
@@ -31,18 +32,31 @@ class AuthRepository {
           body: requestBody);
     }, onSuccess: (response) async {
       result = response.body;
+      debugPrint(result);
     }, onError: (error) {
       debugPrint(error.message ?? 'Something went wrong');
     });
     return result;
   }
 
-  Future<void> logout()async{
-    await clearLocalData().then((value){
-          Navigator.pushNamedAndRemoveUntil(
-              AppNavigatorKey.key.currentState!.context,
-              AppRouter.signIn,
+  Future<void> logout() async {
+    await clearLocalData().then((value) {
+      Navigator.pushNamedAndRemoveUntil(
+          AppNavigatorKey.key.currentState!.context,
+          AppRouter.signIn,
               (route) => false);
     });
+  }
+
+  Future<String?> generateUserToken() async {
+    try {
+      final FirebaseMessaging fcm = FirebaseMessaging.instance;
+      final fcmToken = await fcm.getToken();
+      debugPrint('Device Token: $fcmToken');
+      return fcmToken!;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
   }
 }

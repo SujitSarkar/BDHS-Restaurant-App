@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/Material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import '../../../../core/constants/app_color.dart';
 import '../../../../core/constants/dummy_data.dart';
 import '../../../../core/constants/text_size.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/widgets/shimmer_widget.dart';
 import '../provider/home_provider.dart';
 import '../tile/home_grid_tile.dart';
 
@@ -18,7 +20,14 @@ class HomeScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-          body: Column(
+          body: homeProvider.initialLoading
+              ? ShimmerWidget(child: _bodyUI(context, homeProvider, size))
+              : _bodyUI(context, homeProvider, size)),
+    );
+  }
+
+  Widget _bodyUI(BuildContext context, HomeProvider homeProvider, Size size) =>
+      Column(
         children: [
           ///Header
           Stack(
@@ -45,6 +54,11 @@ class HomeScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              // CachedNetworkImage(
+                              //   imageUrl: "http://via.placeholder.com/350x150",
+                              //   placeholder: (context, url) => CircularProgressIndicator(),
+                              //   errorWidget: (context, url, error) => Icon(Icons.error),
+                              // ),
                               const CircleAvatar(
                                 backgroundColor: AppColor.appBodyBg,
                                 radius: 24,
@@ -56,9 +70,9 @@ class HomeScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Mr. Steven',
-                                    style: TextStyle(
+                                  Text(
+                                    '${homeProvider.loginResponseModel?.user?.name??'N/A'}',
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: TextSize.bodyText,
                                         fontWeight: FontWeight.bold),
@@ -71,9 +85,9 @@ class HomeScreen extends StatelessWidget {
                                         color: AppColor.secondaryColor,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))),
-                                    child: const Text(
-                                      'Restaurant',
-                                      style: TextStyle(
+                                    child: Text(
+                                      homeProvider.loginResponseModel?.user?.roleType??'N/A',
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: TextSize.smallText),
                                     ),
@@ -185,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.pushNamed(context, AppRouter.orderList);
                           },
                           leadingAsset: 'assets/images/home/pending_order.png',
-                          title: '0012',
+                          title: '${homeProvider.dashboardDataModel?.data?.pendingOrder}',
                           subtitle: 'Pending Order',
                           titleColor: AppColor.secondaryColor,
                           borderColor: AppColor.secondaryColor),
@@ -194,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.pushNamed(context, AppRouter.orderList);
                           },
                           leadingAsset: 'assets/images/home/complete_order.png',
-                          title: '12 K',
+                          title: '${homeProvider.dashboardDataModel?.data?.completeOrder}',
                           subtitle: 'Order Done',
                           titleColor: AppColor.primaryColor,
                           borderColor: AppColor.primaryColor),
@@ -203,14 +217,14 @@ class HomeScreen extends StatelessWidget {
                             Navigator.pushNamed(context, AppRouter.orderList);
                           },
                           leadingAsset: 'assets/images/home/total_order.png',
-                          title: '53 K',
+                          title: '${homeProvider.dashboardDataModel?.data?.totalOrder}',
                           subtitle: 'Total Order',
                           titleColor: AppColor.primaryColor,
                           borderColor: AppColor.primaryColor),
                       HomeGridTile(
                           onTap: () {},
                           leadingAsset: 'assets/images/home/payment.png',
-                          title: '10 M',
+                          title: '${homeProvider.dashboardDataModel?.data?.totalPayment}',
                           subtitle: 'Payment',
                           titleColor: AppColor.secondaryColor,
                           borderColor: AppColor.secondaryColor),
@@ -250,7 +264,5 @@ class HomeScreen extends StatelessWidget {
             ),
           )
         ],
-      )),
-    );
-  }
+      );
 }

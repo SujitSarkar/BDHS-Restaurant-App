@@ -17,7 +17,10 @@ dependencies:
   fluttertoast: ^8.2.2
   get_storage: ^2.1.1
   pie_chart: ^5.4.0
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
   firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.9
 
 dev_dependencies:
   flutter_test:

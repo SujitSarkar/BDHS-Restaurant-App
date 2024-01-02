@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -7,6 +8,7 @@ import 'error_handler.dart';
 
 class ApiService {
   ApiService._privateConstructor();
+
   static final ApiService instance = ApiService._privateConstructor();
 
   factory ApiService() {
@@ -15,12 +17,16 @@ class ApiService {
 
   Map<String, String> headers = {
     'accept': '*/*',
-    'Content-Type': 'application/json',
-    'app': 'android'
+    'Content-Type': 'application/json'
   };
+  String token = '';
 
   void addAccessToken(String? token) {
     headers.addEntries({'Authorization': 'Bearer $token'}.entries);
+  }
+
+  void addToken(String userToken) {
+    token = userToken;
   }
 
   Future<void> apiCall(
@@ -31,7 +37,7 @@ class ApiService {
     try {
       if (onLoading != null) onLoading();
       // hide keyboard
-      // SystemChannels.textInput.invokeMethod('TextInput.hide');
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
       //execute function that user passed
       var response = await execute();
       return onSuccess(response);
@@ -44,28 +50,36 @@ class ApiService {
   }
 
   ///get api request
-  Future<dynamic> get(String url) async {
-    http.Response response = await http.get(Uri.parse(url), headers: headers);
+  Future<dynamic> get(String url, {bool addToken = false}) async {
+    http.Response response = await http
+        .get(Uri.parse('$url${addToken ? token : ''}'), headers: headers);
     return _processResponse(response);
   }
 
   ///post api request
-  Future<dynamic> post(String url, {dynamic body}) async {
-    http.Response response = await http.post(Uri.parse(url),
-        headers: headers, body: body != null ? jsonEncode(body) : null);
+  Future<dynamic> post(String url,
+      {dynamic body, bool addToken = false}) async {
+    http.Response response = await http.post(
+        Uri.parse('$url${addToken ? token : ''}'),
+        headers: headers,
+        body: body != null ? jsonEncode(body) : null);
     return _processResponse(response);
   }
 
   ///patch api request
-  Future<dynamic> patch(String url, {dynamic body}) async {
-    http.Response response = await http.patch(Uri.parse(url),
-        headers: headers, body: body != null ? jsonEncode(body) : null);
+  Future<dynamic> patch(String url,
+      {dynamic body, bool addToken = false}) async {
+    http.Response response = await http.patch(
+        Uri.parse('$url${addToken ? token : ''}'),
+        headers: headers,
+        body: body != null ? jsonEncode(body) : null);
     return _processResponse(response);
   }
 
   ///delete api request
-  Future<dynamic> delete(String url) async {
-    http.Response response = await http.delete(Uri.parse(url),headers: headers);
+  Future<dynamic> delete(String url, {bool addToken = false}) async {
+    http.Response response = await http
+        .delete(Uri.parse('$url${addToken ? token : ''}'), headers: headers);
     return _processResponse(response);
   }
 
@@ -73,7 +87,7 @@ class ApiService {
   dynamic _processResponse(var response) {
     debugPrint('url:- ${response.request?.url}');
     debugPrint('statusCode:- ${response.statusCode}');
-    debugPrint('AccessToken:- ${headers['Authorization']}');
+    debugPrint('Token:- $token');
     // debugPrint('response:- ${response.body}');
 
     switch (response.statusCode) {
