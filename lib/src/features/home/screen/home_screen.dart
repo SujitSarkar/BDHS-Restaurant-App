@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/Material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
