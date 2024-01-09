@@ -1,10 +1,12 @@
+import 'package:bdhs_restaurant_app/src/features/order/model/order_list_data_model.dart';
 import 'package:flutter/Material.dart';
 import '../../../../core/constants/app_color.dart';
 import '../../../../core/constants/text_size.dart';
 import '../../../../core/router/app_router.dart';
 
 class OrderTile extends StatelessWidget {
-  const OrderTile({super.key, required this.trailingColor});
+  const OrderTile({super.key, required this.model, required this.trailingColor});
+  final OrderListDataModel model;
   final Color trailingColor;
 
   @override
@@ -31,8 +33,8 @@ class OrderTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const FittedBox(
-                  child: Text('#S134\n'),
+                FittedBox(
+                  child: Text('#S${model.id}\n'),
                 ),
                 RichText(
                   textAlign: TextAlign.center,
@@ -93,9 +95,9 @@ class OrderTile extends StatelessWidget {
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const FittedBox(
-                    child: Text(': Mr. X Hacking',
-                        style: TextStyle(fontSize: TextSize.buttonText)),
+                  FittedBox(
+                    child: Text(': ${model.customer}',
+                        style: const TextStyle(fontSize: TextSize.buttonText)),
                   ),
                   Text(': 09:35',
                       style: TextStyle(
@@ -105,7 +107,7 @@ class OrderTile extends StatelessWidget {
                       style: TextStyle(
                           fontSize: TextSize.smallText,
                           color: AppColor.secondaryTextColor)),
-                  Text(': \$45',
+                  Text(': ${model.payment?.payable} ৳',
                       style: TextStyle(
                           fontSize: TextSize.smallText,
                           color: AppColor.secondaryTextColor)),

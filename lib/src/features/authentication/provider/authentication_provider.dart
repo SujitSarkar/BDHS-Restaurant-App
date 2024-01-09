@@ -52,14 +52,6 @@ class AuthenticationProvider extends ChangeNotifier {
       showToast('Invalid email address');
       return;
     }
-    if (!validatePassword(passwordController.text)) {
-      showToast('Password must be at least 6 characters');
-      return;
-    }
-    if (!validatePassword(confirmPasswordController.text)) {
-      showToast('Password must be at least 6 characters');
-      return;
-    }
     if (passwordController.text != confirmPasswordController.text) {
       showToast('Password does\'nt match');
       return;
@@ -100,10 +92,6 @@ class AuthenticationProvider extends ChangeNotifier {
     }
     if (!validateEmail(emailController.text)) {
       showToast('Invalid email address');
-      return;
-    }
-    if (!validatePassword(passwordController.text)) {
-      showToast('Password must be at least 6 characters');
       return;
     }
     loading = true;
