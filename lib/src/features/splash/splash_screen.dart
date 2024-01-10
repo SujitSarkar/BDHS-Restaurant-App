@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> onInit() async {
-    final loginResponseFromLocal = getData(LocalStorageKey.loginResponseKey);
+    final loginResponseFromLocal = await getData(LocalStorageKey.loginResponseKey);
 
     await Future.delayed(const Duration(seconds: 1)).then((value) {
       if (loginResponseFromLocal != null) {
