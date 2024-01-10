@@ -1,22 +1,29 @@
+import 'package:bdhs_restaurant_app/core/constants/app_string.dart';
 import 'package:bdhs_restaurant_app/src/features/order/model/order_list_data_model.dart';
+import 'package:bdhs_restaurant_app/src/features/order/screen/order_details_screen.dart';
 import 'package:flutter/Material.dart';
 import '../../../../core/constants/app_color.dart';
 import '../../../../core/constants/text_size.dart';
 import '../../../../core/router/app_router.dart';
 
 class OrderTile extends StatelessWidget {
-  const OrderTile({super.key, required this.model, required this.trailingColor});
+  const OrderTile(
+      {super.key,
+      required this.model,
+      required this.orderType});
+
   final OrderListDataModel model;
-  final Color trailingColor;
+  final String orderType;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.pushNamed(context, AppRouter.orderDetails);
+      onTap: () {
+        Navigator.pushNamed(context, AppRouter.orderDetails,
+            arguments: OrderDetailsScreen(orderModel: model, orderType: orderType));
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6,vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         decoration: BoxDecoration(
             color: AppColor.cardColor,
             borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -63,7 +70,8 @@ class OrderTile extends StatelessWidget {
             ),
 
             ///Name
-            Expanded(child: Row(children: [
+            Expanded(
+                child: Row(children: [
               Expanded(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +104,7 @@ class OrderTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FittedBox(
-                    child: Text(': ${model.customer}',
+                    child: Text(': ${model.customer??'N/A'}',
                         style: const TextStyle(fontSize: TextSize.buttonText)),
                   ),
                   Text(': 09:35',
@@ -107,7 +115,7 @@ class OrderTile extends StatelessWidget {
                       style: TextStyle(
                           fontSize: TextSize.smallText,
                           color: AppColor.secondaryTextColor)),
-                  Text(': ${model.payment?.payable} ৳',
+                  Text(': ${model.payment?.payable??'N/A'} ৳',
                       style: TextStyle(
                           fontSize: TextSize.smallText,
                           color: AppColor.secondaryTextColor)),
@@ -119,15 +127,26 @@ class OrderTile extends StatelessWidget {
             Stack(
               alignment: Alignment.center,
               children: [
-                CircleAvatar(backgroundColor: trailingColor,radius: 9),
+                CircleAvatar(
+                    backgroundColor: orderType == AppString.orderType.first
+                        ? Colors.red
+                        : orderType == AppString.orderType[1]
+                            ? AppColor.warningColor
+                            : AppColor.primaryColor,
+                    radius: 9),
                 Container(
                   height: 15,
                   width: 15,
                   decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 2),
-                  color: trailingColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(10))
-                ),)
+                      border: Border.all(color: Colors.white, width: 2),
+                      color: orderType == AppString.orderType.first
+                          ? Colors.red
+                          : orderType == AppString.orderType[1]
+                          ? AppColor.warningColor
+                          : AppColor.primaryColor,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10))),
+                )
               ],
             )
           ],

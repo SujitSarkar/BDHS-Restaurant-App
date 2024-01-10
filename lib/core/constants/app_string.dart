@@ -9,4 +9,10 @@ class AppString {
   static const String no = 'No';
   static const String yes = 'Yes';
   static const String noInternetConnection = 'No internet connection';
+
+  static List<String> orderType = [
+    'Pending Order',
+    'Processing Order',
+    'Complete Order'
+  ];
 }

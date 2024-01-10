@@ -47,11 +47,15 @@ class GeneratedRoute {
             const OrderListScreen());
 
       case AppRouter.orderDetails:
+        final OrderDetailsScreen arguments = settings.arguments as OrderDetailsScreen;
         return PageRouteBuilder(
             settings: settings,
             transitionsBuilder: slideTransition,
             pageBuilder: (_, animation, secondaryAnimation) =>
-            const OrderDetailsScreen());
+            OrderDetailsScreen(
+              orderModel: arguments.orderModel,
+              orderType: arguments.orderType,
+            ));
 
       case AppRouter.noInternet:
         return PageRouteBuilder(

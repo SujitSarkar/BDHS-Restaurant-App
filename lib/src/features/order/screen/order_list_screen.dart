@@ -1,3 +1,4 @@
+import 'package:bdhs_restaurant_app/core/constants/app_string.dart';
 import 'package:bdhs_restaurant_app/src/features/home/provider/home_provider.dart';
 import 'package:bdhs_restaurant_app/src/features/order/provider/order_provider.dart';
 import 'package:flutter/Material.dart';
@@ -34,12 +35,15 @@ class _OrderListScreenState extends State<OrderListScreen> {
     return SafeArea(
       child: Scaffold(
           body: orderProvider.initialLoading
-              ? ShimmerWidget(child: _bodyUI(context, orderProvider, homeProvider, size))
-              : _bodyUI(context, orderProvider, homeProvider, size)),
+              ? ShimmerWidget(
+                  child: _bodyUI(context, orderProvider, homeProvider, size))
+              : _bodyUI(context, orderProvider, homeProvider, size),
+      ),
     );
   }
 
-  Widget _bodyUI(BuildContext context, OrderProvider orderProvider, HomeProvider homeProvider, Size size) =>
+  Widget _bodyUI(BuildContext context, OrderProvider orderProvider,
+          HomeProvider homeProvider, Size size) =>
       Column(
         children: [
           ///Header
@@ -79,7 +83,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${homeProvider.loginResponseModel?.user?.name??'N/A'}',
+                                    '${homeProvider.loginResponseModel?.user?.name ?? 'N/A'}',
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: TextSize.bodyText,
@@ -94,7 +98,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))),
                                     child: Text(
-                                      homeProvider.loginResponseModel?.user?.roleType??'N/A',
+                                      homeProvider.loginResponseModel?.user
+                                              ?.roleType ??
+                                          'N/A',
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: TextSize.smallText),
@@ -138,14 +144,15 @@ class _OrderListScreenState extends State<OrderListScreen> {
               padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
               children: [
                 ///Pending Order
-                if(orderProvider.pendingOrderList.isNotEmpty)
-                const Text('Pending Order',
-                    style: TextStyle(
-                        color: AppColor.secondaryColor,
-                        fontSize: TextSize.bodyText,
-                        fontWeight: FontWeight.bold)),
-                if(orderProvider.pendingOrderList.isNotEmpty)
-                const Divider(color: Colors.black, thickness: 0.5, height: 4),
+                if (orderProvider.pendingOrderList.isNotEmpty)
+                  const Text('Pending Order',
+                      style: TextStyle(
+                          color: AppColor.secondaryColor,
+                          fontSize: TextSize.bodyText,
+                          fontWeight: FontWeight.bold)),
+                if (orderProvider.pendingOrderList.isNotEmpty)
+                  const Divider(color: Colors.black, thickness: 0.5, height: 4),
+                if (orderProvider.pendingOrderList.isNotEmpty)
                 ListView.separated(
                   padding: const EdgeInsets.only(top: 12),
                   physics: const NeverScrollableScrollPhysics(),
@@ -153,20 +160,23 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   itemCount: orderProvider.pendingOrderList.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 16),
-                  itemBuilder: (context, index) =>
-                      OrderTile(model: orderProvider.pendingOrderList[index],trailingColor: Colors.red),
+                  itemBuilder: (context, index) => OrderTile(
+                    model: orderProvider.pendingOrderList[index],
+                    orderType: AppString.orderType.first,
+                  ),
                 ),
                 const SizedBox(height: 20),
 
                 ///Processing Order
-                if(orderProvider.processingOrderList.isNotEmpty)
-                const Text('Processing Order',
-                    style: TextStyle(
-                        color: AppColor.warningColor,
-                        fontSize: TextSize.bodyText,
-                        fontWeight: FontWeight.bold)),
-                if(orderProvider.processingOrderList.isNotEmpty)
-                const Divider(color: Colors.black, thickness: 0.5, height: 4),
+                if (orderProvider.processingOrderList.isNotEmpty)
+                  const Text('Processing Order',
+                      style: TextStyle(
+                          color: AppColor.warningColor,
+                          fontSize: TextSize.bodyText,
+                          fontWeight: FontWeight.bold)),
+                if (orderProvider.processingOrderList.isNotEmpty)
+                  const Divider(color: Colors.black, thickness: 0.5, height: 4),
+                if (orderProvider.processingOrderList.isNotEmpty)
                 ListView.separated(
                   padding: const EdgeInsets.only(top: 12),
                   physics: const NeverScrollableScrollPhysics(),
@@ -174,20 +184,22 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   itemCount: orderProvider.processingOrderList.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 16),
-                  itemBuilder: (context, index) =>
-                      OrderTile(model: orderProvider.processingOrderList[index],trailingColor: AppColor.warningColor),
+                  itemBuilder: (context, index) => OrderTile(
+                      model: orderProvider.processingOrderList[index],
+                      orderType: AppString.orderType[1]),
                 ),
                 const SizedBox(height: 20),
 
                 ///Complete Order
-                if(orderProvider.completeOrderList.isNotEmpty)
-                const Text('Complete Order',
-                    style: TextStyle(
-                        color: AppColor.primaryColor,
-                        fontSize: TextSize.bodyText,
-                        fontWeight: FontWeight.bold)),
-                if(orderProvider.completeOrderList.isNotEmpty)
-                const Divider(color: Colors.black, thickness: 0.5, height: 4),
+                if (orderProvider.completeOrderList.isNotEmpty)
+                  const Text('Complete Order',
+                      style: TextStyle(
+                          color: AppColor.primaryColor,
+                          fontSize: TextSize.bodyText,
+                          fontWeight: FontWeight.bold)),
+                if (orderProvider.completeOrderList.isNotEmpty)
+                  const Divider(color: Colors.black, thickness: 0.5, height: 4),
+                if (orderProvider.completeOrderList.isNotEmpty)
                 ListView.separated(
                   padding: const EdgeInsets.only(top: 12),
                   physics: const NeverScrollableScrollPhysics(),
@@ -195,8 +207,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   itemCount: orderProvider.completeOrderList.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 16),
-                  itemBuilder: (context, index) =>
-                      OrderTile(model: orderProvider.processingOrderList[index],trailingColor: AppColor.primaryColor),
+                  itemBuilder: (context, index) => OrderTile(
+                      model: orderProvider.processingOrderList[index],
+                      orderType: AppString.orderType.last),
                 ),
                 const SizedBox(height: 12),
               ],
