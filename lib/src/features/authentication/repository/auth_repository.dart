@@ -51,9 +51,8 @@ class AuthRepository {
 
   Future<String?> generateUserToken() async {
     try {
-      final FirebaseMessaging fcm = FirebaseMessaging.instance;
-      final fcmToken = await fcm.getToken();
-      debugPrint('Device Token: $fcmToken');
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      debugPrint('Device FCM Token is: $fcmToken');
       return fcmToken!;
     } catch (e) {
       debugPrint(e.toString());

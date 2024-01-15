@@ -1,3 +1,4 @@
+import 'package:bdhs_restaurant_app/shared/push_notification_service/firebase_push_api_service.dart';
 import 'package:bdhs_restaurant_app/src/features/authentication/provider/authentication_provider.dart';
 import 'package:bdhs_restaurant_app/src/features/home/provider/home_provider.dart';
 import 'package:bdhs_restaurant_app/src/features/order/provider/order_provider.dart';
@@ -16,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebasePushApiService().initPushNotification();
   runApp(const MyApp());
 }
 
