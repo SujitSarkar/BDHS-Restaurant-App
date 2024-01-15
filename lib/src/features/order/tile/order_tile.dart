@@ -1,4 +1,5 @@
 import 'package:bdhs_restaurant_app/core/constants/app_string.dart';
+import 'package:bdhs_restaurant_app/core/constants/formatter.dart';
 import 'package:bdhs_restaurant_app/src/features/order/model/order_list_data_model.dart';
 import 'package:bdhs_restaurant_app/src/features/order/screen/order_details_screen.dart';
 import 'package:flutter/Material.dart';
@@ -43,21 +44,10 @@ class OrderTile extends StatelessWidget {
                 FittedBox(
                   child: Text('#S${model.id}\n'),
                 ),
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: TextStyle(
-                        color: AppColor.textColor,
-                        fontSize: TextSize.extraSmallText),
-                    children: const [
-                      TextSpan(text: '25\n'),
-                      TextSpan(
-                        text: 'minute ago',
-                        style: TextStyle(color: AppColor.secondaryColor),
-                      ),
-                    ],
-                  ),
-                ),
+                if(model.orderDetl!=null && model.orderDetl!.isNotEmpty)
+                Text(formatTimeDifference(model.orderDetl!.first.orderDate!),textAlign: TextAlign.center,style: TextStyle(
+                    color: AppColor.textColor,
+                    fontSize: TextSize.extraSmallText)),
               ],
             ),
 
@@ -107,7 +97,7 @@ class OrderTile extends StatelessWidget {
                     child: Text(': ${model.customer??'N/A'}',
                         style: const TextStyle(fontSize: TextSize.buttonText)),
                   ),
-                  Text(': 09:35',
+                  Text(': ${model.orderDetl!=null && model.orderDetl!.isNotEmpty? model.orderDetl!.first.orderTime:'N/A'}',
                       style: TextStyle(
                           fontSize: TextSize.smallText,
                           color: AppColor.secondaryTextColor)),

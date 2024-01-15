@@ -23,7 +23,7 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> getPendingOrder() async {
     await _orderRepository
-        .getOrderList(orderEndpoint: ApiEndpoint.pendingOrder)
+        .getOrderList(orderEndpoint: ApiEndpoint.pendingOrderList)
         .then((result) {
       if (result.isNotEmpty) {
         pendingOrderList = result;
@@ -33,7 +33,7 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> getProcessingOrder() async {
     await _orderRepository
-        .getOrderList(orderEndpoint: ApiEndpoint.processingOrder)
+        .getOrderList(orderEndpoint: ApiEndpoint.processingOrderList)
         .then((result) {
       if (result.isNotEmpty) {
         processingOrderList = result;
@@ -43,7 +43,7 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> getCompleteOrder() async {
     await _orderRepository
-        .getOrderList(orderEndpoint: ApiEndpoint.completeOrder)
+        .getOrderList(orderEndpoint: ApiEndpoint.completeOrderList)
         .then((result) {
       if (result.isNotEmpty) {
         completeOrderList = result;

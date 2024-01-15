@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
-List<OrderListDataModel> orderListDataModelFromJson(String str) => List<OrderListDataModel>.from(json.decode(str).map((x) => OrderListDataModel.fromJson(x)));
+List<OrderListDataModel> orderListDataModelFromJson(String str) =>
+    List<OrderListDataModel>.from(
+        json.decode(str).map((x) => OrderListDataModel.fromJson(x)));
 
 class OrderListDataModel {
   final int? id;
@@ -19,14 +22,21 @@ class OrderListDataModel {
     this.payment,
   });
 
-  factory OrderListDataModel.fromJson(Map<String, dynamic> json) => OrderListDataModel(
-    id: json["id"],
-    customer: json["customer"],
-    restaurant: json["restaurant"],
-    orderDetl: json["order_detl"] == null ? [] : List<OrderDetl>.from(json["order_detl"]!.map((x) => OrderDetl.fromJson(x))),
-    deliveryAddress: json["delivery_address"] == null ? null : DeliveryAddress.fromJson(json["delivery_address"]),
-    payment: json["payment"] == null ? null : Payment.fromJson(json["payment"]),
-  );
+  factory OrderListDataModel.fromJson(Map<String, dynamic> json) =>
+      OrderListDataModel(
+        id: json["id"],
+        customer: json["customer"],
+        restaurant: json["restaurant"],
+        orderDetl: json["order_detl"] == null
+            ? []
+            : List<OrderDetl>.from(
+                json["order_detl"]!.map((x) => OrderDetl.fromJson(x))),
+        deliveryAddress: json["delivery_address"] == null
+            ? null
+            : DeliveryAddress.fromJson(json["delivery_address"]),
+        payment:
+            json["payment"] == null ? null : Payment.fromJson(json["payment"]),
+      );
 }
 
 class DeliveryAddress {
@@ -42,13 +52,13 @@ class DeliveryAddress {
     this.longitude,
   });
 
-  factory DeliveryAddress.fromJson(Map<String, dynamic> json) => DeliveryAddress(
-    id: json["id"],
-    address: json["address"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-  );
-
+  factory DeliveryAddress.fromJson(Map<String, dynamic> json) =>
+      DeliveryAddress(
+        id: json["id"],
+        address: json["address"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+      );
 }
 
 class OrderDetl {
@@ -56,20 +66,27 @@ class OrderDetl {
   final String? userId;
   final String? quantity;
   final String? pricePerQty;
+  final DateTime? orderDate;
+  final String? orderTime;
 
   OrderDetl({
     this.foodId,
     this.userId,
     this.quantity,
     this.pricePerQty,
+    this.orderDate,
+    this.orderTime
   });
 
   factory OrderDetl.fromJson(Map<String, dynamic> json) => OrderDetl(
-    foodId: json["food_id"],
-    userId: json["user_id"],
-    quantity: json["quantity"],
-    pricePerQty: json["price_per_qty"],
-  );
+      foodId: json["food_id"],
+      userId: json["user_id"],
+      quantity: json["quantity"],
+      pricePerQty: json["price_per_qty"],
+      orderDate: DateFormat('dd-MM-yyyy HH:mm:ss')
+          .parse("${json["order_date"]} ${json["order_time"]}"),
+      orderTime: json["order_time"]
+      );
 }
 
 class Payment {
@@ -88,11 +105,10 @@ class Payment {
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) => Payment(
-    id: json["id"],
-    total: json["total"],
-    discount: json["discount"],
-    deliveryFee: json["delivery_fee"],
-    payable: json["payable"],
-  );
-  
+        id: json["id"],
+        total: json["total"],
+        discount: json["discount"],
+        deliveryFee: json["delivery_fee"],
+        payable: json["payable"],
+      );
 }

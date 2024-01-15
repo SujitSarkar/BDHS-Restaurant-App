@@ -1,8 +1,11 @@
+import 'package:bdhs_restaurant_app/core/constants/app_string.dart';
 import 'package:bdhs_restaurant_app/src/features/order/model/order_list_data_model.dart';
 import 'package:flutter/Material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_color.dart';
 import '../../../../core/constants/text_size.dart';
+import '../../../../core/widgets/small_solid_button.dart';
 import '../../../../core/widgets/solid_button.dart';
 import '../../home/provider/home_provider.dart';
 import '../provider/order_provider.dart';
@@ -180,7 +183,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                     style: const TextStyle(
                                         fontSize: TextSize.buttonText)),
                               ),
-                              Text(': 09:35',
+                              Text(': ${orderModel.orderDetl!=null && orderModel.orderDetl!.isNotEmpty? orderModel.orderDetl!.first.orderTime:'N/A'}',
                                   style: TextStyle(
                                       fontSize: TextSize.smallText,
                                       color: AppColor.secondaryTextColor)),
@@ -211,13 +214,14 @@ class OrderDetailsScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Expanded(
-                                      child: Text('12-03-24 : 09-12-24',
+                                      child: orderModel.orderDetl!=null && orderModel.orderDetl!.isNotEmpty
+                                          ? Text(DateFormat('dd-MM-yy HH:mm').format(orderModel.orderDetl!.first.orderDate!),
                                           style: TextStyle(
                                               fontSize: TextSize.extraSmallText,
                                               color: AppColor
-                                                  .secondaryTextColor))),
-                                  const Icon(Icons.access_time_rounded,
-                                      size: 14)
+                                                  .secondaryTextColor))
+                                          : const SizedBox.shrink()),
+                                  const Icon(Icons.access_time_rounded, size: 14)
                                 ],
                               )
                             ]))
@@ -272,26 +276,37 @@ class OrderDetailsScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 ///Button
+                if(orderType==AppString.orderType.first)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SolidButton(
+                    SmallSolidButton(
+                        backgroundColor: AppColor.warningColor,
                         onTap: () async {},
                         child: const Text(
-                          'Order Ready',
+                          'Precessing',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: TextSize.buttonText,
+                              fontSize: TextSize.smallButtonText,
                               fontWeight: FontWeight.bold),
                         )),
-                    SolidButton(
+                    SmallSolidButton(
+                        onTap: () async {},
+                        child: const Text(
+                          'Ready',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: TextSize.smallButtonText,
+                              fontWeight: FontWeight.bold),
+                        )),
+                    SmallSolidButton(
                         onTap: () async {},
                         backgroundColor: AppColor.secondaryColor,
                         child: const Text(
                           'Cancel Order',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: TextSize.buttonText,
+                              fontSize: TextSize.smallButtonText,
                               fontWeight: FontWeight.bold),
                         )),
                   ],
