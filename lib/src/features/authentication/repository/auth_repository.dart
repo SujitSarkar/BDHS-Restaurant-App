@@ -41,6 +41,7 @@ class AuthRepository {
 
   Future<void> logout() async {
     await clearLocalData().then((value) {
+      ApiService.instance.clearToken();
       Navigator.pushNamedAndRemoveUntil(
           AppNavigatorKey.key.currentState!.context,
           AppRouter.signIn,

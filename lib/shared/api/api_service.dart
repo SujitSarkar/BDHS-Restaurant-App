@@ -28,6 +28,7 @@ class ApiService {
   void addToken(String userToken) {
     token = userToken;
   }
+  void clearToken() => token = '';
 
   Future<void> apiCall(
       {required Function execute,
@@ -50,17 +51,17 @@ class ApiService {
   }
 
   ///get api request
-  Future<dynamic> get(String url, {bool addToken = false}) async {
+  Future<dynamic> get(String url, {bool addToken = false, String? id}) async {
     http.Response response = await http
-        .get(Uri.parse('$url${addToken ? token : ''}'), headers: headers);
+        .get(Uri.parse('$url${addToken ? token : ''}${id!=null?'/$id':''}'), headers: headers);
     return _processResponse(response);
   }
 
   ///post api request
   Future<dynamic> post(String url,
-      {dynamic body, bool addToken = false}) async {
+      {dynamic body, bool addToken = false, String? id}) async {
     http.Response response = await http.post(
-        Uri.parse('$url${addToken ? token : ''}'),
+        Uri.parse('$url${addToken ? token : ''}${id!=null?'/$id':''}'),
         headers: headers,
         body: body != null ? jsonEncode(body) : null);
     return _processResponse(response);
@@ -68,18 +69,18 @@ class ApiService {
 
   ///patch api request
   Future<dynamic> patch(String url,
-      {dynamic body, bool addToken = false}) async {
+      {dynamic body, bool addToken = false, String? id}) async {
     http.Response response = await http.patch(
-        Uri.parse('$url${addToken ? token : ''}'),
+        Uri.parse('$url${addToken ? token : ''}${id!=null?'/$id':''}'),
         headers: headers,
         body: body != null ? jsonEncode(body) : null);
     return _processResponse(response);
   }
 
   ///delete api request
-  Future<dynamic> delete(String url, {bool addToken = false}) async {
+  Future<dynamic> delete(String url, {bool addToken = false, String? id}) async {
     http.Response response = await http
-        .delete(Uri.parse('$url${addToken ? token : ''}'), headers: headers);
+        .delete(Uri.parse('$url${addToken ? token : ''}${id!=null?'/$id':''}'), headers: headers);
     return _processResponse(response);
   }
 
@@ -88,7 +89,7 @@ class ApiService {
     debugPrint('url:- ${response.request?.url}');
     debugPrint('statusCode:- ${response.statusCode}');
     debugPrint('Token:- $token');
-    // debugPrint('response:- ${response.body}');
+    debugPrint('response:- ${response.body}');
 
     switch (response.statusCode) {
       case 200:

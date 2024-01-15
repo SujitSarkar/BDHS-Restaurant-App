@@ -12,7 +12,6 @@ class OrderRepository {
           '${ApiEndpoint.baseUrl}$orderEndpoint',
           addToken: true);
     }, onSuccess: (response) async {
-      debugPrint(response.body);
       var jsonData = jsonDecode(response.body);
       if(jsonData['data']!=null && jsonData['data'].isNotEmpty){
         result = orderListDataModelFromJson(jsonEncode(jsonData['data']));
