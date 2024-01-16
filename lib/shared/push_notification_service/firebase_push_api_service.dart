@@ -3,6 +3,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../core/router/app_router.dart';
+import '../../core/utils/app_navigator_key.dart';
+
 class FirebasePushApiService {
   static final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
@@ -19,8 +22,13 @@ class FirebasePushApiService {
     await getUserPermission();
     final fcmToken = await firebaseMessaging.getToken();
     debugPrint('Device FCM token is: $fcmToken');
+
     await initPushNotification();
     await initLocalNotification();
+
+  }
+  Future<void> firebaseMessagingBackgroundHandler() async {
+    FirebaseMessaging.onBackgroundMessage(handleMessage);
   }
 
   Future<void> initPushNotification() async {
@@ -30,39 +38,48 @@ class FirebasePushApiService {
         badge: true,
         sound: true);
 
-    firebaseMessaging.getInitialMessage().then((value) => _handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-    // FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+    /// Get any messages which caused the application to open from a terminated state.
+    firebaseMessaging.getInitialMessage().then((value) => handleMessage);
+
+    /// Also handle any interaction when the app is in the background via a Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+
+    /// Get any messages application in foreground
     FirebaseMessaging.onMessage.listen(handleForegroundMessage);
   }
 
-  Future<void> handleForegroundMessage(RemoteMessage message) async {
-    final notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+  Future<void> handleForegroundMessage(RemoteMessage? message) async {
+    if(message!=null){
+      debugPrint('::::onForegroundMessage::::');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
 
-    if (notification == null) return;
-    if (android != null) {
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-                androidChannel.id,
-                androidChannel.name,
-                icon: android.smallIcon //'@drawable/ic_launcher'
+      if (notification == null) return;
+      if (android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                  androidChannel.id,
+                  androidChannel.name,
+                  icon: android.smallIcon //'@drawable/ic_launcher'
+              ),
             ),
-          ),
-          payload: jsonEncode(message.toMap())
-      );
+            payload: jsonEncode(message.toMap())
+        );
+      }
     }
   }
 
-  Future<void> _handleMessage(RemoteMessage message) async {
+  Future<void> handleMessage(RemoteMessage message) async {
     if (message.notification != null) {
+      debugPrint('::::handleMessage::::');
       debugPrint('\nNotification Title: ${message.notification?.title}');
       debugPrint('\nNotification Body: ${message.notification?.body}');
       debugPrint('\nNotification Payload: ${message.data}');
+      Navigator.pushNamed(AppNavigatorKey.key.currentState!.context, AppRouter.orderList);
     }
   }
 
@@ -94,7 +111,7 @@ class FirebasePushApiService {
     await flutterLocalNotificationsPlugin.initialize(
         settings, onDidReceiveNotificationResponse: (payload) {
       final message = RemoteMessage.fromMap(jsonDecode(payload.toString()));
-      _handleMessage(message);
+      handleMessage(message);
     });
 
     await flutterLocalNotificationsPlugin
