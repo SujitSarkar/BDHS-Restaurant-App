@@ -2,6 +2,7 @@ import 'package:bdhs_restaurant_app/shared/push_notification_service/firebase_pu
 import 'package:bdhs_restaurant_app/src/features/authentication/provider/authentication_provider.dart';
 import 'package:bdhs_restaurant_app/src/features/home/provider/home_provider.dart';
 import 'package:bdhs_restaurant_app/src/features/order/provider/order_provider.dart';
+import 'package:bdhs_restaurant_app/src/features/profile/provider/profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
               create: (_) => AuthenticationProvider()),
           ChangeNotifierProvider<HomeProvider>(create: (_)=> HomeProvider()),
           ChangeNotifierProvider<OrderProvider>(create: (_) => OrderProvider()),
+          ChangeNotifierProvider<ProfileProvider>(create: (_) => ProfileProvider()),
         ],
         child: MaterialApp(
           navigatorKey: AppNavigatorKey.key,

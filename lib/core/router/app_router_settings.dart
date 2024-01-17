@@ -1,3 +1,4 @@
+import 'package:bdhs_restaurant_app/src/features/profile/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 import '../../src/features/authentication/view/signin_screen.dart';
 import '../../src/features/authentication/view/signup_screen.dart';
@@ -56,6 +57,13 @@ class GeneratedRoute {
               orderModel: arguments.orderModel,
               orderType: arguments.orderType,
             ));
+
+      case AppRouter.profile:
+        return PageRouteBuilder(
+            settings: settings,
+            transitionsBuilder: slideTransition,
+            pageBuilder: (_, animation, secondaryAnimation) =>
+            const ProfileScreen());
 
       case AppRouter.noInternet:
         return PageRouteBuilder(

@@ -9,6 +9,7 @@ class AppRouter {
   static const String home = '/home';
   static const String orderList = '/order-list';
   static const String orderDetails = '/order-details';
+  static const String profile = '/profile';
 
   static const String noInternet = '/no-internet';
 
