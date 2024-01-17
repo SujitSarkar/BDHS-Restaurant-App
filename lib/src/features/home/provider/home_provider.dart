@@ -7,7 +7,7 @@ import '../model/dashboard_data_model.dart';
 import '../repository/home_repository.dart';
 
 class HomeProvider extends ChangeNotifier{
-  final HomeRepository _homeRepository = HomeRepository();
+  static final HomeRepository _homeRepository = HomeRepository();
   bool initialLoading = false;
   DashboardDataModel? dashboardDataModel;
 
