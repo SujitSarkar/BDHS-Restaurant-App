@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/Material.dart';
 import '../../../../core/constants/local_storage_key.dart';
 import '../../../../core/router/app_router.dart';
@@ -52,6 +53,14 @@ class AuthenticationProvider extends ChangeNotifier {
       showToast('Invalid email address');
       return;
     }
+    if (!validatePassword(passwordController.text)) {
+      showToast('Password must be 6 character');
+      return;
+    }
+    if (!validatePassword(confirmPasswordController.text)) {
+      showToast('Password must be 6 character');
+      return;
+    }
     if (passwordController.text != confirmPasswordController.text) {
       showToast('Password does\'nt match');
       return;
@@ -59,7 +68,8 @@ class AuthenticationProvider extends ChangeNotifier {
     loading = true;
     notifyListeners();
 
-    final String? fcmToken = await _authRepository.generateUserToken();
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    final String? fcmToken = await firebaseMessaging.getToken();
 
     if(fcmToken==null){
       loading = false;
@@ -70,7 +80,7 @@ class AuthenticationProvider extends ChangeNotifier {
     Map<String, dynamic> requestBody = {
       "name": nameController.text,
       "email": emailController.text,
-      "mobileNumber": phoneController.text,
+      "mobile_number": phoneController.text,
       "password": passwordController.text,
       "password_confirmation": confirmPasswordController.text,
       "address": addressController.text,

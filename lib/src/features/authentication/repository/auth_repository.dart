@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/Material.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/utils/app_navigator_key.dart';
@@ -47,16 +46,5 @@ class AuthRepository {
           AppRouter.signIn,
               (route) => false);
     });
-  }
-
-  Future<String?> generateUserToken() async {
-    try {
-      final fcmToken = await FirebaseMessaging.instance.getToken();
-      debugPrint('Device FCM Token is: $fcmToken');
-      return fcmToken!;
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return null;
   }
 }

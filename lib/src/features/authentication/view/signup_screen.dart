@@ -125,6 +125,7 @@ class SignupScreen extends StatelessWidget {
                             hintText: 'Address',
                             minLine: 1,
                             maxLine: 3,
+                            textCapitalization: TextCapitalization.words,
                           ),
                           const SizedBox(height: 20),
 
