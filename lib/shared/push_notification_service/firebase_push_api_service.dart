@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/Material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import '../../core/router/app_router.dart';
 import '../../core/utils/app_navigator_key.dart';
 
